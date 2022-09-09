@@ -21,7 +21,7 @@ export function AppRoutes() {
       screenOptions={{headerShown: false}}
       initialRouteName="task">
       <Stack.Screen name="task" component={Task} />
-      <Stack.Screen name="newTask" component={Task} />
+      <Stack.Screen name="newTask" component={NewTask} />
       <Stack.Screen name="details" component={Detail} />
     </Stack.Navigator>
   );

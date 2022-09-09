@@ -1,7 +1,12 @@
 // Import the functions you need from the SDKs you need
-import firebase from 'firebase';
+import firestore, {
+  collection,
+  getDocs,
+  initializeFirestore,
+} from 'firebase/firestore';
 import 'firebase/storage';
 import {initializeApp} from 'firebase/app';
+import {getFirestore} from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,5 +21,18 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const firebaseApp = initializeApp(firebaseConfig);
-export const database = firebase.firestore();
+
+const firebaseApp = initializeApp(firebaseConfig);
+export const database = initializeFirestore(firebaseApp, {
+  experimentalForceLongPolling: true,
+});
+
+export async function getTasks() {
+  const querySnapshot = await getDocs(collection(database, 'Tasks'));
+  const list: any[] = [];
+  querySnapshot.forEach(doc => {
+    console.log(`${doc.id} => ${doc.data()}`);
+    list.push({...doc.data(), id: doc.id});
+  });
+  return list;
+}
