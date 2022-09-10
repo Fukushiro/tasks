@@ -1,6 +1,9 @@
 // Import the functions you need from the SDKs you need
 import firestore, {
   collection,
+  deleteDoc,
+  doc,
+  Firestore,
   getDocs,
   initializeFirestore,
 } from 'firebase/firestore';
@@ -27,12 +30,16 @@ export const database = initializeFirestore(firebaseApp, {
   experimentalForceLongPolling: true,
 });
 
-export async function getTasks() {
-  const querySnapshot = await getDocs(collection(database, 'Tasks'));
+export async function getTasks(databaseParam: Firestore) {
+  const querySnapshot = await getDocs(collection(databaseParam, 'Tasks'));
   const list: any[] = [];
-  querySnapshot.forEach(doc => {
-    console.log(`${doc.id} => ${doc.data()}`);
-    list.push({...doc.data(), id: doc.id});
+  querySnapshot.forEach(docs => {
+    console.log(`${docs.id} => ${docs.data()}`);
+    list.push({...docs.data(), id: docs.id});
   });
   return list;
+}
+
+export async function deleteTask(databaseParam: Firestore, id: string) {
+  await deleteDoc(doc(databaseParam, 'Tasks', id));
 }
