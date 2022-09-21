@@ -1,11 +1,12 @@
 import {collection, deleteDoc, doc, getDocs} from 'firebase/firestore';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {database, deleteTask, getTasks} from '../../utils/firebase';
 import FontAweasome from 'react-native-vector-icons/FontAwesome5';
 import {styles} from './styles';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {AppRouteType} from '../../routes/App.routes';
+import Config from 'react-native-config';
 export function Task() {
   const navigation = useNavigation<AppRouteType>();
   const [task, setTask] = useState<any[]>([]);
@@ -24,9 +25,18 @@ export function Task() {
     }
     action();
   }, [refresh]);
-  useEffect(() => {
-    console.log(task);
-  }, [task]);
+
+  // useFocusEffect
+  useFocusEffect(
+    useCallback(() => {
+      async function action() {
+        const tasks = await getTasks(database);
+
+        setTask(tasks);
+      }
+      action();
+    }, [refresh]),
+  );
   return (
     <View style={styles.container}>
       <FlatList
@@ -42,8 +52,18 @@ export function Task() {
 
                   deleteTaskAction(item.item.id);
                 }}>
-                <FontAweasome name="trash" color={'red'} />
+                <FontAweasome name="trash" color={'#F92E6A'} size={23} />
               </TouchableOpacity>
+              <Text
+                style={styles.DescriptionTask}
+                onPress={() => {
+                  navigation.navigate('details', {
+                    id: item.item.id,
+                    description: item.item.description,
+                  });
+                }}>
+                {item.item.description}
+              </Text>
             </View>
           );
         }}

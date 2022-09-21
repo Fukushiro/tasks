@@ -9,7 +9,7 @@ import {Task} from '../pages/Task';
 type AppRouteParam = {
   task: undefined;
   newTask: undefined;
-  details: undefined;
+  details: {id: number; description: string};
 };
 
 export type AppRouteType = NativeStackNavigationProp<AppRouteParam>;
