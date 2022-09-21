@@ -57,10 +57,10 @@ export function Task() {
               <Text
                 style={styles.DescriptionTask}
                 onPress={() => {
-                  navigation.navigate('details', {
-                    id: item.item.id,
-                    description: item.item.description,
-                  });
+                  // navigation.navigate('details', {
+                  //   id: item.item.id,
+                  //   description: item.item.description,
+                  // });
                 }}>
                 {item.item.description}
               </Text>
